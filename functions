@@ -1,0 +1,27 @@
+# 
+# Exclude patterns listed in $UNZIP_EXCL
+# Ex:
+#    Ignore OS X cruft
+#    UNZIP_EXCL="\*/\.DS_Store __MACOSX/\*"
+#
+
+unzip() {
+    local origcmd=''
+    while test "$#" -gt 0
+    do
+        echo $1
+        case "$1" in
+          -x)
+            shift
+            break
+            ;;
+          *)
+            origcmd="$origcmd $1"
+            shift
+            ;;
+        esac
+    done
+    #echo "running: /usr/bin/unzip $origcmd -x $@ $UNZIP_EXCL"
+    eval /usr/bin/unzip $origcmd -x $@ $UNZIP_EXCL
+}
+
