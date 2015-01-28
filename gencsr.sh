@@ -24,8 +24,8 @@
 
 cat <<EOL
 Select company:
-1) Company
-2) Company
+1) Company 1
+2) Company 2
 
 EOL
 echo -n "Number [1]: "
