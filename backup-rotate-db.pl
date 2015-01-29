@@ -1,10 +1,28 @@
 #!/usr/bin/perl
+#
+# Dump and rotate MySQL database
+#
+# Copyright (C) 2015  Travis Foster <travees@ddv.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 use strict;
 
-#################################
+#
 # Config
-#################################
+#
 
 my $dump_dir = "/tmp";
 
@@ -22,9 +40,9 @@ my $DEBUG = 0;
 
 my $suffix=".gz" if $gzip;
 
-#################################
+#
 # Main script
-#################################
+#
 
 my ($mv_return, $oldfile, $move_to_num, $newfile, $gzip_return, $dump_return);
 
