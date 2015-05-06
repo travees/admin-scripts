@@ -1,0 +1,86 @@
+#!/bin/sh
+#
+# reload_apache_config    Start python script that will reload Apache when config changes
+#
+# chkconfig: 2345 90 60
+# description: reload_apache_config.py is a python script that watches Apache config files for changes
+#              with watchdog and responds by issuing a reload command to Apache.
+#              
+#              
+
+### BEGIN INIT INFO
+# Provides: reload_apache_config
+# Required-Start: $local_fs
+# Required-Stop: $local_fs
+# Default-Start:  2345
+# Default-Stop: 90
+# Short-Description: run python script to reload Apache
+# Description: reload_apache_config.sh is a python script that watches Apache config files for changes
+#              with watchdog and responds by issuing a reload command to Apache.
+### END INIT INFO
+
+#
+# 
+#
+
+if [ -f /etc/init.d/functions ] ; then
+   . /etc/init.d/functions
+elif [ -f /etc/rc.d/init.d/functions ] ; then
+   . /etc/rc.d/init.d/functions  
+else
+   exit 0
+fi
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+prog='/root/bin/reload_apache_config.py'
+pidfile='/var/run/reload_apache_config.pid'
+watchdir='/etc/httpd/conf.d'
+RETVAL=0
+
+start() {
+   printf "Starting apache config watchdog: "
+   RETVAL=1
+   daemon --pidfile $pidfile $prog $watchdir  && success || failure $"reload_apache_config start"
+   echo
+   RETVAL=$?
+   return $RETVAL
+}
+
+stop() {
+   printf "Stopping apache config watchdog: "
+   killproc -p $pidfile reload_apache_config && success || failure $"reload_apache_config stop"
+   echo
+   RETVAL=$?
+   return $RETVAL
+}
+
+restart() {
+   stop
+   start
+}
+
+case "$1" in
+   start)
+      start
+      ;;
+   stop)
+      stop
+      ;;
+   restart)
+      restart
+      ;;
+  status)
+        status -p $pidfile $prog
+	RETVAL=$?
+	;;
+   *)
+       printf "Usage: %s {start|stop|restart}\n" "$0"
+       exit 1
+esac
+
+exit $?
